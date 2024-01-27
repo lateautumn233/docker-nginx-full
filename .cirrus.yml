@@ -1,0 +1,23 @@
+container:
+    image: ubuntu:latest
+    cpu: 8
+    memory: 32
+
+env:
+    CIRRUS_CLONE_DEPTH: 100
+    DOCKER_PASS: ENCRYPTED[ffc4b1d1b228070c2c08573ba1063460796e6fa72b8a524f67905ffe3b8db7277d66f663b71f17bc5c948a51698f8651]
+
+build_kernel_task:
+  name: Build nginx-full
+  start_build_script: |
+        apt-get update && apt-get install -y docker.io docker-buildx sudo
+        sudo service docker start
+        docker login -u lateautumn233 -p $DOCKER_PASS
+        sudo usermod -aG docker $(whoami)
+        newgrp docker
+        docker run --rm hello-world
+        sudo ./local-buildx.sh
+
+  output_artifacts:
+    path: "./out/arch/arm64/boot/Image.gz"
+  

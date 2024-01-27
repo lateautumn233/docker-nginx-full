@@ -19,7 +19,9 @@ RUN apt-get update \
 	openssl unzip \
 	wget \
 	zlib1g-dev \
-	git
+	git \
+	llvm \
+	file
 
 # Lua build
 COPY ./scripts/build-lua /tmp/build-lua
@@ -60,6 +62,8 @@ RUN apt-get update \
 	gettext \
 	wget \
 	xz-utils \
+	llvm \
+	file \
 	&& apt-get clean \
 	&& rm -rf /var/lib/apt/lists/* \
 	&& rm -rf /var/cache/* /var/log/* /tmp/* /var/lib/dpkg/status-old

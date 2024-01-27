@@ -9,7 +9,7 @@ RESET='\E[0m'
 REGISTRY=${REGISTRY:-}
 DOCKER_IMAGE="${REGISTRY}nginxproxymanager/nginx-full"
 
-export OPENRESTY_VERSION=1.21.4.3
+export OPENRESTY_VERSION=1.25.3.1
 export CROWDSEC_OPENRESTY_BOUNCER_VERSION=0.1.7
 export LUA_VERSION=5.1.5
 export LUAROCKS_VERSION=3.3.1
@@ -36,6 +36,9 @@ docker build \
 echo -e "${BLUE}❯ ${CYAN}Building ${YELLOW}acmesh ${CYAN}...${RESET}"
 docker build \
 	--build-arg BASE_IMAGE \
+	--build-arg "HTTP_PROXY=http://192.168.31.161:7897/" \
+    --build-arg "HTTPS_PROXY=http://192.168.31.161:7897/" \
+    --build-arg "NO_PROXY=localhost,127.0.0.1,.example.com" \
 	-t "$ACMESH_IMAGE" \
 	-f docker/Dockerfile.acmesh \
 	.
@@ -43,6 +46,9 @@ docker build \
 echo -e "${BLUE}❯ ${CYAN}Building ${YELLOW}certbot ${CYAN}...${RESET}"
 docker build \
 	--build-arg BASE_IMAGE \
+	--build-arg "HTTP_PROXY=http://192.168.31.161:7897/" \
+    --build-arg "HTTPS_PROXY=http://192.168.31.161:7897/" \
+    --build-arg "NO_PROXY=localhost,127.0.0.1,.example.com" \
 	-t "$CERTBOT_IMAGE" \
 	-f docker/Dockerfile.certbot \
 	.
